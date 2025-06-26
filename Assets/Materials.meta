@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: 90d9096e13a52e34fad594282856e6a4
-=======
 guid: ed9b91dc375f6bf4ebc10dceac62c29c
->>>>>>> b706cb9 (3d ITZ ground floor model with navmesh)
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
