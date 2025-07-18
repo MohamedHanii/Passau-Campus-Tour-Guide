@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
+using UnityEngine.UI;
 
 public class BuildingRoomValidator : MonoBehaviour
 {
@@ -11,9 +12,9 @@ public class BuildingRoomValidator : MonoBehaviour
     
     [Header("UI Components")]
     [SerializeField] private GameObject validationUI;
+    [SerializeField] private TextMeshProUGUI roomNumberText;
     [SerializeField] private TextMeshProUGUI statusText;
-    [SerializeField] private GameObject greenIndicator;
-    [SerializeField] private GameObject redIndicator;
+    [SerializeField] private Button startNavigationButton;
     
     [System.Serializable]
     public class BuildingRooms
@@ -64,10 +65,13 @@ public class BuildingRoomValidator : MonoBehaviour
         {
             validationUI.SetActive(false);
         }
-        
-        // Hide indicators initially
-        if (greenIndicator != null) greenIndicator.SetActive(false);
-        if (redIndicator != null) redIndicator.SetActive(false);
+        // Remove indicator logic
+        if (roomNumberText != null)
+            roomNumberText.text = "";
+        if (statusText != null)
+            statusText.text = "";
+        if (startNavigationButton != null)
+            startNavigationButton.onClick.AddListener(OnStartNavigationClicked);
     }
     
     private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
@@ -118,22 +122,31 @@ public class BuildingRoomValidator : MonoBehaviour
     private void ValidateCurrentRoom(string buildingLabel)
     {
         bool isRoomInsideBuilding = IsRoomInsideBuilding(buildingLabel, currentRoom);
-        
-        // Update UI
+        // Update Room Number
+        if (roomNumberText != null)
+        {
+            roomNumberText.text = $"<b>Room {currentRoom}</b>";
+        }
+        // Update Status with color and button visibility
         if (statusText != null)
         {
-            statusText.text = $"Room {currentRoom}\n{(isRoomInsideBuilding ? "Inside Building" : "Outside Building")}";
-        }
-        
-        // Show appropriate indicator
-        if (greenIndicator != null)
-        {
-            greenIndicator.SetActive(isRoomInsideBuilding);
-        }
-        
-        if (redIndicator != null)
-        {
-            redIndicator.SetActive(!isRoomInsideBuilding);
+            if (isRoomInsideBuilding)
+            {
+                statusText.text = "<color=#27AE60><b>Room is in this building.</b></color>";
+                if (startNavigationButton != null)
+                {
+                    startNavigationButton.gameObject.SetActive(true);
+                    var btnText = startNavigationButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+                    if (btnText != null)
+                        btnText.text = "<b>Navigate to Room</b>";
+                }
+            }
+            else
+            {
+                statusText.text = "<color=#E74C3C><b>Room not in this building.</b></color>";
+                if (startNavigationButton != null)
+                    startNavigationButton.gameObject.SetActive(false);
+            }
         }
     }
     
@@ -164,8 +177,11 @@ public class BuildingRoomValidator : MonoBehaviour
             validationUI.SetActive(false);
         }
         
-        if (greenIndicator != null) greenIndicator.SetActive(false);
-        if (redIndicator != null) redIndicator.SetActive(false);
+        // Remove indicator logic
+        if (roomNumberText != null)
+            roomNumberText.text = "";
+        if (statusText != null)
+            statusText.text = "";
     }
     
     // Public method to change the current room (for testing or future use)
@@ -194,5 +210,11 @@ public class BuildingRoomValidator : MonoBehaviour
         {
             buildingConfigs[0].roomsOutsideBuilding.Add(roomNumber);
         }
+    }
+
+    public void OnStartNavigationClicked()
+    {
+        // TODO: Add your navigation logic here
+        Debug.Log("Start Navigation button clicked!");
     }
 } 
