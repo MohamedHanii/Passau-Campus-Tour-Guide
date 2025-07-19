@@ -5,7 +5,7 @@ using TMPro;
 public class ARSceneSetup : MonoBehaviour
 {
     [Header("Prefabs")]
-    [SerializeField] private GameObject validationUIPrefab;
+    [SerializeField] private GameObject validationPanelPrefab;
     
     [Header("Components")]
     [SerializeField] private ARTrackedImageManager trackedImageManager;
@@ -13,32 +13,28 @@ public class ARSceneSetup : MonoBehaviour
     
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI statusText;
-    [SerializeField] private GameObject greenIndicator;
-    [SerializeField] private GameObject redIndicator;
+    [SerializeField] private TextMeshProUGUI roomNumberText;
+    [SerializeField] private GameObject backButton;
     
     [Header("Room Input UI")]
-    [SerializeField] private GameObject roomInputCanvas;
+    [SerializeField] private GameObject homePanel;
     [SerializeField] private TMP_InputField roomInputField;
     [SerializeField] private UnityEngine.UI.Button startARButton;
     private bool arStarted = false;
     
     void Start()
     {
-        if (roomInputCanvas != null && roomInputField != null && startARButton != null)
+        if (homePanel != null && roomInputField != null && startARButton != null)
         {
-            roomInputCanvas.SetActive(true);
-            // Hide the ValidationUI GameObject in the scene at start
-            GameObject validationUIObj = GameObject.Find("ValidationUI");
-            if (validationUIObj != null)
-                validationUIObj.SetActive(false);
+            homePanel.SetActive(true);
+            GameObject validationPanelObj = GameObject.Find("ValidationPanel");
+            if (validationPanelObj != null)
+                validationPanelObj.SetActive(false);
+            if (backButton != null)
+                backButton.SetActive(false);
             if (trackedImageManager != null)
                 trackedImageManager.enabled = false;
             startARButton.onClick.AddListener(OnStartARClicked);
-
-            // Set panel background to white if possible
-            var panel = roomInputCanvas.GetComponentInChildren<UnityEngine.UI.Image>();
-            if (panel != null)
-                panel.color = Color.white;
         }
         else
         {
@@ -53,18 +49,17 @@ public class ARSceneSetup : MonoBehaviour
         string roomNumber = roomInputField.text;
         if (buildingValidator != null && !string.IsNullOrEmpty(roomNumber))
         {
-            buildingValidator.SetCurrentRoom(roomNumber); // Save the entered room number
+            buildingValidator.SetCurrentRoom(roomNumber);
         }
-        roomInputCanvas.SetActive(false); // Close the input panel
+        homePanel.SetActive(false);
+        if (backButton != null)
+            backButton.SetActive(true);
         if (trackedImageManager != null)
             trackedImageManager.enabled = true;
-        // Do NOT enable validation UI here; let AR tracking handle it
     }
     
     private void SetupARScene()
     {
-        // Do not instantiate or enable validation UI here
-        // Only set up references if needed
         if (trackedImageManager == null)
         {
             trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
@@ -78,7 +73,6 @@ public class ARSceneSetup : MonoBehaviour
                 buildingValidator = validatorGO.AddComponent<BuildingRoomValidator>();
             }
         }
-        // Configure the building validator as before
         if (buildingValidator != null)
         {
             var validatorField = typeof(BuildingRoomValidator).GetField("trackedImageManager", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -94,27 +88,22 @@ public class ARSceneSetup : MonoBehaviour
     {
         if (buildingValidator != null)
         {
-            // Add some rooms inside the building (Building 40)
-            buildingValidator.AddRoomToBuilding("101");
-            buildingValidator.AddRoomToBuilding("102");
-            buildingValidator.AddRoomToBuilding("103");
-            buildingValidator.AddRoomToBuilding("104");
-            buildingValidator.AddRoomToBuilding("105");
-            buildingValidator.AddRoomToBuilding("201");
-            buildingValidator.AddRoomToBuilding("202");
-            buildingValidator.AddRoomToBuilding("203");
-            buildingValidator.AddRoomToBuilding("204");
-            buildingValidator.AddRoomToBuilding("205");
-            
-            // Add some rooms outside the building
-            buildingValidator.AddRoomOutsideBuilding("301");
-            buildingValidator.AddRoomOutsideBuilding("302");
-            buildingValidator.AddRoomOutsideBuilding("303");
-            buildingValidator.AddRoomOutsideBuilding("401");
-            buildingValidator.AddRoomOutsideBuilding("402");
-            buildingValidator.AddRoomOutsideBuilding("403");
-            
-            Debug.Log("Default rooms configured for Building 40");
+            Debug.Log("Default rooms are now hardcoded for building 43");
         }
+    }
+
+    public void OnBackButtonPressed()
+    {
+        Debug.Log("Back button pressed!");
+        GameObject validationPanelObj = GameObject.Find("ValidationPanel");
+        if (validationPanelObj != null)
+            validationPanelObj.SetActive(false);
+        if (homePanel != null)
+            homePanel.SetActive(true);
+        if (backButton != null)
+            backButton.SetActive(false);
+        if (trackedImageManager != null)
+            trackedImageManager.enabled = false;
+        arStarted = false;
     }
 } 

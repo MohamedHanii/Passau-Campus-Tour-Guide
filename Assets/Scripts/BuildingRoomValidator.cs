@@ -11,7 +11,7 @@ public class BuildingRoomValidator : MonoBehaviour
     [SerializeField] private ARTrackedImageManager trackedImageManager;
     
     [Header("UI Components")]
-    [SerializeField] private GameObject validationUI;
+    [SerializeField] private GameObject validationPanel;
     [SerializeField] private TextMeshProUGUI roomNumberText;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private Button startNavigationButton;
@@ -25,7 +25,18 @@ public class BuildingRoomValidator : MonoBehaviour
     }
     
     [Header("Building Configurations")]
-    public List<BuildingRooms> buildingConfigs = new List<BuildingRooms>();
+    public static List<BuildingRooms> buildingConfigs = new List<BuildingRooms> {
+        new BuildingRooms {
+            buildingLabelName = "43",
+            roomsInsideBuilding = new List<string> { "S001", "S002", "S004", "S011", "S252", "C005", "M017" },
+            roomsOutsideBuilding = new List<string>()
+        },
+        new BuildingRooms {
+            buildingLabelName = "40",
+            roomsInsideBuilding = new List<string>(),
+            roomsOutsideBuilding = new List<string>()
+        }
+    };
     
     [Header("Current Room")]
     [SerializeField] private string currentRoom = "101"; // Hardcoded for now, can be changed in inspector
@@ -61,11 +72,10 @@ public class BuildingRoomValidator : MonoBehaviour
     void Start()
     {
         // Hide UI initially
-        if (validationUI != null)
+        if (validationPanel != null)
         {
-            validationUI.SetActive(false);
+            validationPanel.SetActive(false);
         }
-        // Remove indicator logic
         if (roomNumberText != null)
             roomNumberText.text = "";
         if (statusText != null)
@@ -98,7 +108,7 @@ public class BuildingRoomValidator : MonoBehaviour
         }
         if (!anyTracked)
         {
-            HideValidationUI();
+            HideValidationPanel();
         }
     }
     
@@ -109,12 +119,12 @@ public class BuildingRoomValidator : MonoBehaviour
         {
             if (trackedImage.trackingState == TrackingState.Tracking)
             {
-                ShowValidationUI();
+                ShowValidationPanel();
                 ValidateCurrentRoom(label);
             }
             else if (trackedImage.trackingState == TrackingState.None)
             {
-                HideValidationUI();
+                HideValidationPanel();
             }
         }
     }
@@ -161,23 +171,20 @@ public class BuildingRoomValidator : MonoBehaviour
         return false;
     }
     
-    private void ShowValidationUI()
+    private void ShowValidationPanel()
     {
-        if (validationUI != null)
+        if (validationPanel != null)
         {
-            validationUI.SetActive(true);
+            validationPanel.SetActive(true);
         }
     }
     
-    private void HideValidationUI()
+    private void HideValidationPanel()
     {
-        Debug.Log("Hiding Validation UI");
-        if (validationUI != null)
+        if (validationPanel != null)
         {
-            validationUI.SetActive(false);
+            validationPanel.SetActive(false);
         }
-        
-        // Remove indicator logic
         if (roomNumberText != null)
             roomNumberText.text = "";
         if (statusText != null)
@@ -187,34 +194,15 @@ public class BuildingRoomValidator : MonoBehaviour
     // Public method to change the current room (for testing or future use)
     public void SetCurrentRoom(string roomNumber)
     {
-        currentRoom = roomNumber;
-        if (validationUI != null && validationUI.activeInHierarchy)
+        currentRoom = roomNumber.ToUpperInvariant();
+        if (validationPanel != null && validationPanel.activeInHierarchy)
         {
             ValidateCurrentRoom(buildingConfigs[0].buildingLabelName); // Assuming the first building label
         }
     }
     
-    // Public method to add rooms to the building
-    public void AddRoomToBuilding(string roomNumber)
-    {
-        if (!buildingConfigs[0].roomsInsideBuilding.Contains(roomNumber))
-        {
-            buildingConfigs[0].roomsInsideBuilding.Add(roomNumber);
-        }
-    }
-    
-    // Public method to add rooms outside the building
-    public void AddRoomOutsideBuilding(string roomNumber)
-    {
-        if (!buildingConfigs[0].roomsOutsideBuilding.Contains(roomNumber))
-        {
-            buildingConfigs[0].roomsOutsideBuilding.Add(roomNumber);
-        }
-    }
-
     public void OnStartNavigationClicked()
     {
         // TODO: Add your navigation logic here
-        Debug.Log("Start Navigation button clicked!");
     }
 } 

@@ -157,27 +157,8 @@ public class TestSceneManager : MonoBehaviour
     {
         if (buildingValidator != null)
         {
-            // Add some rooms inside the building
-            buildingValidator.AddRoomToBuilding("101");
-            buildingValidator.AddRoomToBuilding("102");
-            buildingValidator.AddRoomToBuilding("103");
-            buildingValidator.AddRoomToBuilding("104");
-            buildingValidator.AddRoomToBuilding("105");
-            buildingValidator.AddRoomToBuilding("201");
-            buildingValidator.AddRoomToBuilding("202");
-            buildingValidator.AddRoomToBuilding("203");
-            buildingValidator.AddRoomToBuilding("204");
-            buildingValidator.AddRoomToBuilding("205");
-            
-            // Add some rooms outside the building
-            buildingValidator.AddRoomOutsideBuilding("301");
-            buildingValidator.AddRoomOutsideBuilding("302");
-            buildingValidator.AddRoomOutsideBuilding("303");
-            buildingValidator.AddRoomOutsideBuilding("401");
-            buildingValidator.AddRoomOutsideBuilding("402");
-            buildingValidator.AddRoomOutsideBuilding("403");
-            
-            Debug.Log("Default rooms configured for testing");
+            // No longer adding default rooms dynamically
+            Debug.Log("Default rooms are now hardcoded for building 43");
         }
     }
     
@@ -196,8 +177,8 @@ public class TestSceneManager : MonoBehaviour
         if (buildingValidator != null && roomInputField != null)
         {
             string roomNumber = roomInputField.text;
-            buildingValidator.AddRoomToBuilding(roomNumber);
-            Debug.Log($"Added room {roomNumber} to building");
+            // buildingValidator.AddRoomToBuilding(roomNumber); // Method removed
+            Debug.Log($"(No longer adding) room {roomNumber} to building");
         }
     }
     
@@ -206,8 +187,8 @@ public class TestSceneManager : MonoBehaviour
         if (buildingValidator != null && roomInputField != null)
         {
             string roomNumber = roomInputField.text;
-            buildingValidator.AddRoomOutsideBuilding(roomNumber);
-            Debug.Log($"Added room {roomNumber} outside building");
+            // buildingValidator.AddRoomOutsideBuilding(roomNumber); // Method removed
+            Debug.Log($"(No longer adding) room {roomNumber} outside building");
         }
     }
     

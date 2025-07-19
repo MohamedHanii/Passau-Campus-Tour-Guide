@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
-  m_Name: ReferenceImageLibrary 1
+  m_Name: ReferenceImageLibrary
   m_EditorClassIdentifier: 
-  m_GuidLow: 5287293176948770006
-  m_GuidHigh: 9107261584280577972
+  m_GuidLow: 5054840426553756778
+  m_GuidHigh: 6132096713729075134
   m_DataStore:
     m_Storage: []
   m_Images:
   - m_SerializedGuid:
-      m_GuidLow: 4725443701015656036
-      m_GuidHigh: 10947612527880513412
+      m_GuidLow: 5708987170798387090
+      m_GuidHigh: 18333934028398478518
     m_SerializedTextureGuid:
       m_GuidLow: 1248844880754882560
       m_GuidHigh: 1715232808623766825
-    m_Size: {x: 0.2, y: 0.28018293}
+    m_Size: {x: 0, y: 0}
     m_SpecifySize: 0
     m_Name: 40
     m_Texture: {fileID: 2800000, guid: 68f5b800c9cd1154297d1dd926bbcd17, type: 3}
   - m_SerializedGuid:
-      m_GuidLow: 4695941364730838774
-      m_GuidHigh: 12614180005557479065
+      m_GuidLow: 5747933380334745468
+      m_GuidHigh: 12115139728660893592
     m_SerializedTextureGuid:
-      m_GuidLow: 3793329193906068673
-      m_GuidHigh: 3288694492226376184
-    m_Size: {x: 0.2, y: 0.11059603}
+      m_GuidLow: 17412189430259696391
+      m_GuidHigh: 780365976608533114
+    m_Size: {x: 0, y: 0}
     m_SpecifySize: 0
-    m_Name: 29
-    m_Texture: {fileID: 2800000, guid: cee3dcc19ccd34a4f8d1ef6737caa32d, type: 3}
+    m_Name: 43
+    m_Texture: {fileID: 2800000, guid: 7870c3078608f1a47a6a8d9eb86ad40a, type: 3}

@@ -20,17 +20,7 @@ public class RoomTestController : MonoBehaviour
         {
             testButton.onClick.AddListener(TestCurrentRoom);
         }
-        
-        if (addInsideButton != null)
-        {
-            addInsideButton.onClick.AddListener(AddRoomToBuilding);
-        }
-        
-        if (addOutsideButton != null)
-        {
-            addOutsideButton.onClick.AddListener(AddRoomOutsideBuilding);
-        }
-        
+        // Removed addInsideButton and addOutsideButton listeners
         // Set initial room number
         if (roomInputField != null)
         {
@@ -48,44 +38,14 @@ public class RoomTestController : MonoBehaviour
         }
     }
     
-    public void AddRoomToBuilding()
-    {
-        if (buildingValidator != null && roomInputField != null)
-        {
-            string roomNumber = roomInputField.text;
-            buildingValidator.AddRoomToBuilding(roomNumber);
-            Debug.Log($"Added room {roomNumber} to building");
-        }
-    }
-    
-    public void AddRoomOutsideBuilding()
-    {
-        if (buildingValidator != null && roomInputField != null)
-        {
-            string roomNumber = roomInputField.text;
-            buildingValidator.AddRoomOutsideBuilding(roomNumber);
-            Debug.Log($"Added room {roomNumber} outside building");
-        }
-    }
+    // Removed AddRoomToBuilding and AddRoomOutsideBuilding methods
     
     // Pre-configure some test rooms
     public void SetupTestRooms()
     {
         if (buildingValidator != null)
         {
-            // Add some rooms inside the building
-            buildingValidator.AddRoomToBuilding("101");
-            buildingValidator.AddRoomToBuilding("102");
-            buildingValidator.AddRoomToBuilding("103");
-            buildingValidator.AddRoomToBuilding("201");
-            buildingValidator.AddRoomToBuilding("202");
-            
-            // Add some rooms outside the building
-            buildingValidator.AddRoomOutsideBuilding("301");
-            buildingValidator.AddRoomOutsideBuilding("302");
-            buildingValidator.AddRoomOutsideBuilding("401");
-            buildingValidator.AddRoomOutsideBuilding("402");
-            
+            // No longer adding test rooms dynamically
             Debug.Log("Test rooms configured!");
         }
     }
