@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -15,6 +17,7 @@ public class BuildingRoomValidator : MonoBehaviour
     [SerializeField] private TextMeshProUGUI roomNumberText;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private Button startNavigationButton;
+    // Removed debugText
     
     [System.Serializable]
     public class BuildingRooms
@@ -34,6 +37,11 @@ public class BuildingRoomValidator : MonoBehaviour
         new BuildingRooms {
             buildingLabelName = "40",
             roomsInsideBuilding = new List<string>(),
+            roomsOutsideBuilding = new List<string>()
+        },
+        new BuildingRooms {
+            buildingLabelName = "41",
+            roomsInsideBuilding = new List<string>{"x001", "x002", "x003", "x004", "x005", "x006", "x007", "x008", "x009", "x010"},
             roomsOutsideBuilding = new List<string>()
         }
     };
@@ -96,7 +104,7 @@ public class BuildingRoomValidator : MonoBehaviour
             HandleTrackedImage(trackedImage);
         }
         
-        // Only hide UI if no images are currently tracked
+        // Check overall tracking status
         bool anyTracked = false;
         foreach (var trackedImage in trackedImageManager.trackables)
         {
@@ -114,23 +122,37 @@ public class BuildingRoomValidator : MonoBehaviour
     
     private void HandleTrackedImage(ARTrackedImage trackedImage)
     {
-        string label = trackedImage.referenceImage.name;
-        if (buildingLookup.ContainsKey(label))
+        if (trackedImage.referenceImage == null || string.IsNullOrEmpty(trackedImage.referenceImage.name))
         {
-            if (trackedImage.trackingState == TrackingState.Tracking)
-            {
-                ShowValidationPanel();
-                ValidateCurrentRoom(label);
-            }
-            else if (trackedImage.trackingState == TrackingState.None)
-            {
-                HideValidationPanel();
-            }
+            return;
+        }
+
+        string label = trackedImage.referenceImage.name;
+
+        // Normalize: treat "43", "43-1" to "43-6" as "43"
+        if (label == "43" || (label.StartsWith("43-") && int.TryParse(label.Substring(3), out int n) && n >= 1 && n <= 6))
+        {
+            label = "43";
+        }
+
+        if (trackedImage.trackingState == TrackingState.Tracking)
+        {
+            ShowValidationPanel();
+            ValidateCurrentRoom(label);
+        }
+        else // Covers Limited, None, etc.
+        {
+            HideValidationPanel();
         }
     }
     
     private void ValidateCurrentRoom(string buildingLabel)
     {
+        if (!buildingLookup.ContainsKey(buildingLabel))
+        {
+            return;
+        }
+
         bool isRoomInsideBuilding = IsRoomInsideBuilding(buildingLabel, currentRoom);
         // Update Room Number
         if (roomNumberText != null)
@@ -164,8 +186,8 @@ public class BuildingRoomValidator : MonoBehaviour
     {
         if (buildingLookup.TryGetValue(buildingLabel, out var config))
         {
-            if (config.roomsInsideBuilding.Contains(roomNumber)) return true;
-            if (config.roomsOutsideBuilding.Contains(roomNumber)) return false;
+            if (config.roomsInsideBuilding.Contains(roomNumber, StringComparer.OrdinalIgnoreCase)) return true;
+            if (config.roomsOutsideBuilding.Contains(roomNumber, StringComparer.OrdinalIgnoreCase)) return false;
         }
         // Default: outside
         return false;

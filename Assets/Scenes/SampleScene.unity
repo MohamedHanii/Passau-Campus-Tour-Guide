@@ -1266,7 +1266,7 @@ MonoBehaviour:
   <trackablesChanged>k__BackingField:
     m_PersistentCalls:
       m_Calls: []
-  m_SerializedLibrary: {fileID: 11400000, guid: db9be47b44adeb94c9a71a25efa9a4a2, type: 2}
+  m_SerializedLibrary: {fileID: 11400000, guid: 31f982d50a2b6e149a03e0f678a4cc89, type: 2}
   m_MaxNumberOfMovingImages: 0
   m_TrackedImagePrefab: {fileID: 0}
 --- !u!1 &580573811
