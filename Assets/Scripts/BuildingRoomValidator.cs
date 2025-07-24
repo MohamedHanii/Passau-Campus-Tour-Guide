@@ -19,45 +19,24 @@ public class BuildingRoomValidator : MonoBehaviour
     [SerializeField] private Button startNavigationButton;
     // Removed debugText
     
-    [System.Serializable]
-    public class BuildingRooms
-    {
-        public string buildingLabelName;
-        public List<string> roomsInsideBuilding = new List<string>();
-        public List<string> roomsOutsideBuilding = new List<string>();
-    }
-    
-    [Header("Building Configurations")]
-    public static List<BuildingRooms> buildingConfigs = new List<BuildingRooms> {
-        new BuildingRooms {
-            buildingLabelName = "43",
-            roomsInsideBuilding = new List<string> { "S001", "S002", "S004", "S011", "S252", "C005", "M017" },
-            roomsOutsideBuilding = new List<string>()
-        },
-        new BuildingRooms {
-            buildingLabelName = "40",
-            roomsInsideBuilding = new List<string>(),
-            roomsOutsideBuilding = new List<string>()
-        },
-        new BuildingRooms {
-            buildingLabelName = "41",
-            roomsInsideBuilding = new List<string>{"x001", "x002", "x003", "x004", "x005", "x006", "x007", "x008", "x009", "x010"},
-            roomsOutsideBuilding = new List<string>()
-        }
-    };
+    [Header("Building Config Data")]
+    [SerializeField] private BuildingRoomConfig buildingRoomConfig;
     
     [Header("Current Room")]
-    [SerializeField] private string currentRoom = "101"; // Hardcoded for now, can be changed in inspector
+    [SerializeField] private string currentRoom = "101";
     
-    private Dictionary<string, BuildingRooms> buildingLookup = new Dictionary<string, BuildingRooms>();
+    private Dictionary<string, BuildingRoomConfig.BuildingRooms> buildingLookup = new Dictionary<string, BuildingRoomConfig.BuildingRooms>();
     
     void Awake()
     {
         buildingLookup.Clear();
-        foreach (var config in buildingConfigs)
+        if (buildingRoomConfig != null)
         {
-            if (!string.IsNullOrEmpty(config.buildingLabelName))
-                buildingLookup[config.buildingLabelName] = config;
+            foreach (var config in buildingRoomConfig.buildingConfigs)
+            {
+                if (!string.IsNullOrEmpty(config.buildingLabelName))
+                    buildingLookup[config.buildingLabelName] = config;
+            }
         }
     }
     
@@ -187,7 +166,6 @@ public class BuildingRoomValidator : MonoBehaviour
         if (buildingLookup.TryGetValue(buildingLabel, out var config))
         {
             if (config.roomsInsideBuilding.Contains(roomNumber, StringComparer.OrdinalIgnoreCase)) return true;
-            if (config.roomsOutsideBuilding.Contains(roomNumber, StringComparer.OrdinalIgnoreCase)) return false;
         }
         // Default: outside
         return false;
@@ -219,7 +197,9 @@ public class BuildingRoomValidator : MonoBehaviour
         currentRoom = roomNumber.ToUpperInvariant();
         if (validationPanel != null && validationPanel.activeInHierarchy)
         {
-            ValidateCurrentRoom(buildingConfigs[0].buildingLabelName); // Assuming the first building label
+            // Use the first building label if available
+            if (buildingRoomConfig != null && buildingRoomConfig.buildingConfigs.Count > 0)
+                ValidateCurrentRoom(buildingRoomConfig.buildingConfigs[0].buildingLabelName);
         }
     }
     

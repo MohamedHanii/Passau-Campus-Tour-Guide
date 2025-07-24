@@ -1759,6 +1759,7 @@ MonoBehaviour:
   roomNumberText: {fileID: 1104259794}
   statusText: {fileID: 227938924}
   startNavigationButton: {fileID: 1880296326}
+  buildingRoomConfig: {fileID: 11400000, guid: 5515d159d72956e4db5e99d17a2aaf8a, type: 2}
   currentRoom: 101
 --- !u!4 &888630876
 Transform:

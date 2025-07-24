@@ -7,12 +7,10 @@ public class RoomTestController : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private TMP_InputField roomInputField;
     [SerializeField] private Button testButton;
-    [SerializeField] private Button addInsideButton;
-    [SerializeField] private Button addOutsideButton;
     
     [Header("Building Validator")]
     [SerializeField] private BuildingRoomValidator buildingValidator;
-    
+
     void Start()
     {
         // Set up button listeners
@@ -20,14 +18,16 @@ public class RoomTestController : MonoBehaviour
         {
             testButton.onClick.AddListener(TestCurrentRoom);
         }
-        // Removed addInsideButton and addOutsideButton listeners
         // Set initial room number
         if (roomInputField != null)
         {
             roomInputField.text = "101";
         }
     }
-    
+
+    /// <summary>
+    /// Tests the current room number entered in the input field using the BuildingRoomValidator.
+    /// </summary>
     public void TestCurrentRoom()
     {
         if (buildingValidator != null && roomInputField != null)
@@ -35,18 +35,6 @@ public class RoomTestController : MonoBehaviour
             string roomNumber = roomInputField.text;
             buildingValidator.SetCurrentRoom(roomNumber);
             Debug.Log($"Testing room: {roomNumber}");
-        }
-    }
-    
-    // Removed AddRoomToBuilding and AddRoomOutsideBuilding methods
-    
-    // Pre-configure some test rooms
-    public void SetupTestRooms()
-    {
-        if (buildingValidator != null)
-        {
-            // No longer adding test rooms dynamically
-            Debug.Log("Test rooms configured!");
         }
     }
 } 
